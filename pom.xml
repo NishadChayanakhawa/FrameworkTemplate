@@ -9,6 +9,9 @@
 	<poi.version>5.0.0</poi.version>
 	<testng.version>7.4.0</testng.version>	
 	<extentReport.version>5.0.8</extentReport.version>
+	<failsafe.version>3.0.0-M5</failsafe.version>
+	<java.version>1.8</java.version>
+	<mavenCompiler.version>2.5.1</mavenCompiler.version>
 	</properties>
   
   <dependencies>
@@ -44,4 +47,45 @@
 		    <version>${extentReport.version}</version>
 		</dependency>
   </dependencies>
+  
+  <build>
+  	<plugins>
+  		<!-- Maven compiler plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${mavenCompiler.version}</version>
+				<inherited>true</inherited>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+  		<!-- Failsafe -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>${failsafe.version}</version>
+				<executions>
+					<execution>
+						<id>default-integration-test</id>
+						<goals>
+							<goal>integration-test</goal>
+						</goals>
+						<configuration>
+							<suiteXmlFiles>
+								<suiteXmlFile>testng.xml</suiteXmlFile>
+							</suiteXmlFiles>
+							<properties>
+								<property>
+									<name>listener</name>
+									<value>home.frameworkTemplate.listeners.TestReportGenerator</value>
+								</property>
+							</properties>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+  	</plugins>
+  </build>
 </project>
