@@ -1,28 +1,115 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>home</groupId>
-  <artifactId>FrameworkTemplate</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  
-  <properties>
-  <selenium.version>3.141.59</selenium.version>
-	<poi.version>5.0.0</poi.version>
-	<testng.version>7.4.0</testng.version>	
-	<extentReport.version>5.0.8</extentReport.version>
-	<failsafe.version>3.0.0-M5</failsafe.version>
-	<java.version>1.8</java.version>
-	<mavenCompiler.version>2.5.1</mavenCompiler.version>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>home</groupId>
+	<artifactId>FrameworkTemplate</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<properties>
+		<selenium.version>3.141.59</selenium.version>
+		<poi.version>5.0.0</poi.version>
+		<testng.version>7.4.0</testng.version>
+		<extentReport.version>5.0.8</extentReport.version>
+		<failsafe.version>3.0.0-M5</failsafe.version>
+		<java.version>1.8</java.version>
+		<mavenCompiler.version>2.5.1</mavenCompiler.version>
+		<antrun.version>3.0.0</antrun.version>
 	</properties>
-  
-  <dependencies>
-  <!-- Selenium -->
+
+	<profiles>
+		<profile>
+			<id>default-run</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<testNG.testNames>GoogleTests,MSNTests</testNG.testNames>
+				<testNG.groups>highPriority,mediumPriority,lowPriority</testNG.groups>
+			</properties>
+		</profile>
+		<profile>
+			<id>GoogleTests</id>
+			<activation>
+				<property>
+					<name>Tests</name>
+					<value>GoogleTests</value>
+				</property>
+			</activation>
+			<properties>
+				<testNG.testNames>GoogleTests</testNG.testNames>
+			</properties>
+		</profile>
+		<profile>
+			<id>MSNTests</id>
+			<activation>
+				<property>
+					<name>Tests</name>
+					<value>MSNTests</value>
+				</property>
+			</activation>
+			<properties>
+				<testNG.testNames>MSNTests</testNG.testNames>
+			</properties>
+		</profile>
+		<profile>
+			<id>AllTests</id>
+			<activation>
+				<property>
+					<name>Tests</name>
+					<value>All</value>
+				</property>
+			</activation>
+			<properties>
+				<testNG.testNames>GoogleTests,MSNTests</testNG.testNames>
+			</properties>
+		</profile>
+		<profile>
+			<id>FullCoverage</id>
+			<activation>
+				<property>
+					<name>Coverage</name>
+					<value>Full</value>
+				</property>
+			</activation>
+			<properties>
+				<testNG.groups>highPriority,mediumPriority,lowPriority</testNG.groups>
+			</properties>
+		</profile>
+		<profile>
+			<id>MediumCoverage</id>
+			<activation>
+				<property>
+					<name>Coverage</name>
+					<value>Medium</value>
+				</property>
+			</activation>
+			<properties>
+				<testNG.groups>highPriority,mediumPriority</testNG.groups>
+			</properties>
+		</profile>
+		<profile>
+			<id>LowCoverage</id>
+			<activation>
+				<property>
+					<name>Coverage</name>
+					<value>Low</value>
+				</property>
+			</activation>
+			<properties>
+				<testNG.groups>highPriority</testNG.groups>
+			</properties>
+		</profile>
+	</profiles>
+
+	<dependencies>
+		<!-- Selenium -->
 		<!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
 			<version>${selenium.version}</version>
 		</dependency>
-		
+
 		<!-- Working with Excel for test data -->
 		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
 		<dependency>
@@ -42,15 +129,15 @@
 		<!-- Extent Report -->
 		<!-- https://mvnrepository.com/artifact/com.aventstack/extentreports -->
 		<dependency>
-		    <groupId>com.aventstack</groupId>
-		    <artifactId>extentreports</artifactId>
-		    <version>${extentReport.version}</version>
+			<groupId>com.aventstack</groupId>
+			<artifactId>extentreports</artifactId>
+			<version>${extentReport.version}</version>
 		</dependency>
-  </dependencies>
-  
-  <build>
-  	<plugins>
-  		<!-- Maven compiler plugin -->
+	</dependencies>
+
+	<build>
+		<plugins>
+			<!-- Maven compiler plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -61,7 +148,30 @@
 					<target>${java.version}</target>
 				</configuration>
 			</plugin>
-  		<!-- Failsafe -->
+			
+			<!-- Maven antrun plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>${antrun.version}</version>
+				<executions>
+					<execution>
+						<phase>initialize</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<delete includeemptydirs="true">
+									<fileset dir="${project.basedir}/TestResults" includes="**/*" />
+								</delete>
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<!-- Failsafe -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
@@ -76,16 +186,21 @@
 							<suiteXmlFiles>
 								<suiteXmlFile>testng.xml</suiteXmlFile>
 							</suiteXmlFiles>
+							<groups>${testNG.groups}</groups>
 							<properties>
 								<property>
 									<name>listener</name>
 									<value>home.frameworkTemplate.listeners.TestReportGenerator</value>
+								</property>
+								<property>
+									<name>testnames</name>
+									<value>${testNG.testNames}</value>
 								</property>
 							</properties>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
-  	</plugins>
-  </build>
+		</plugins>
+	</build>
 </project>

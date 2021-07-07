@@ -10,7 +10,7 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import static home.frameworkTemplate.testHelpers.WebDriverHelper.getWebDriver;
 @SuppressWarnings("unchecked")
-public class DummyTests {
+public class DummyTests2 {
 	WebDriver driver;
 	
 	@BeforeTest(alwaysRun=true)
@@ -25,7 +25,7 @@ public class DummyTests {
 	
 	@Test(groups= {"highPriority"})
 	public void dummyTest1(ITestContext testContext) {
-		driver.get("https://www.google.co.in/");
+		driver.get("https://www.msn.com/en-in");
 		testContext.setAttribute("testSteps", new ArrayList<String>());
 		testContext.setAttribute("testName","Dummy Test 1");
 		testContext.setAttribute("driver",driver);
@@ -39,7 +39,7 @@ public class DummyTests {
 
 	@Test(groups= {"mediumPriority"})
 	public void dummyTest2(ITestContext testContext) {
-		driver.get("https://www.google.co.in/");
+		driver.get("https://www.msn.com/en-in");
 		testContext.setAttribute("testSteps", new ArrayList<String>());
 		testContext.setAttribute("testName","Dummy Test 2");
 		testContext.setAttribute("driver",driver);
@@ -53,7 +53,7 @@ public class DummyTests {
 	
 	@Test(groups= {"lowPriority"})
 	public void dummyTest3() {
-		driver.get("https://www.google.co.in/");
+		driver.get("https://www.msn.com/en-in");
 		Assert.assertTrue(false,"Dummy Test3 Assertion failed");
 	}
 }
