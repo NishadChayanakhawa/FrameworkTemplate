@@ -25,7 +25,7 @@ public class DummyTests {
 	
 	@Test(groups= {"highPriority"},
 	     	dataProvider="getTestDataFromExcel",
-		dataProviderClass=home.expenseTracker.testDataProviders.TestDataProvider.class)
+		dataProviderClass=arb.frameworkTemplate.testDataProviders.TestDataProvider.class)
 	public void dummyTest1(Map<String,String> testData,ITestContext testContext) {
 		driver.get("https://www.google.co.in/");
 		testContext.setAttribute("testSteps", new ArrayList<String>());
